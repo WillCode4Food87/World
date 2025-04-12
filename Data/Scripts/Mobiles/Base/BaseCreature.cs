@@ -4000,8 +4000,9 @@ namespace Server.Mobiles
 			
     		if (this.Controlled && owner != null)
     		{
-        		// Call the skill gain system, passing the pet (this) and the attacker
-        		Server.Custom.KoperPets.PetTamingSkillGain.TryTamingGain(this, from);
+                // Call the skill gain system, passing the pet (this) and the attacker
+                Server.Custom.KoperPets.KoperPetManager.AwardXP(this, from);
+                Server.Custom.KoperPets.PetTamingSkillGain.TryTamingGain(this, from);
     		}
 			#endregion
 
@@ -6089,8 +6090,9 @@ namespace Server.Mobiles
         		{
             		if (value == OrderType.Come || value == OrderType.Guard || value == OrderType.Follow || value == OrderType.Stay)
             		{
-                		Server.Custom.KoperPets.KoperHerdingGain.TryGainHerdingSkill(ControlMaster);
-            		}
+                        Server.Custom.KoperPets.KoperHerdingGain.TryGainHerdingSkill(ControlMaster);
+                        Server.Custom.KoperPets.KoperDruidismGain.TryGainDruidismSkill(ControlMaster);
+                    }
         		}
 				#endregion
 			}

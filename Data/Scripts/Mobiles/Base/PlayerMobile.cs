@@ -805,27 +805,30 @@ namespace Server.Mobiles
 		}
 
 		public virtual void UpdateFollowers(){
-			this.FollowersMax = CalculateFollowersMax();
-			// Additional slots, if configured, are added after the max is determined by skill mastery above
-			this.FollowersMax += MyServerSettings.AdditionalFollowerSlots();
-		}
+            double totalSkill = this.Skills[SkillName.Herding].Base +
+                 this.Skills[SkillName.Veterinary].Base +
+                 this.Skills[SkillName.Druidism].Base +
+                 this.Skills[SkillName.Taming].Base;
 
-		private int CalculateFollowersMax()
-		{
-			double herding = MySettings.S_ItemInfluencedTamingSlots ? this.Skills[SkillName.Herding].Value : this.Skills[SkillName.Herding].Base;
-			double veterinary = MySettings.S_ItemInfluencedTamingSlots ? this.Skills[SkillName.Veterinary].Value : this.Skills[SkillName.Veterinary].Base;
-			double druidism = MySettings.S_ItemInfluencedTamingSlots ? this.Skills[SkillName.Druidism].Value : this.Skills[SkillName.Druidism].Base;
-			double taming = MySettings.S_ItemInfluencedTamingSlots ? this.Skills[SkillName.Taming].Value : this.Skills[SkillName.Taming].Base;
+            int baseFollowers = 5;
 
-			if (herding >= 120 && veterinary >= 120 && druidism >= 120 && taming >= 120)
-				return 8;
-			if (herding >= 90 && veterinary >= 90 && druidism >= 90 && taming >= 90)
-				return 7;
-			if (herding >= 60 && veterinary >= 60 && druidism >= 60 && taming >= 60)
-				return 6;
+            if (totalSkill >= 480)
+                baseFollowers = 8;
+            else if (totalSkill >= 420)
+                baseFollowers = 7;
+            else if (totalSkill >= 360)
+                baseFollowers = 7;
+            else if (totalSkill >= 300)
+                baseFollowers = 6;
+            else if (totalSkill >= 240)
+                baseFollowers = 6;
+            else if (totalSkill >= 180)
+                baseFollowers = 5;
+            else
+                baseFollowers = 5;
 
-			return 5;
-		}
+            this.FollowersMax = baseFollowers + MyServerSettings.AdditionalFollowers(totalSkill);
+        }
 
 		public override int GetMaxResistance( ResistanceType type )
 		{
