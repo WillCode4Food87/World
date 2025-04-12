@@ -568,13 +568,35 @@ namespace Server
 			return text;
 		}
 
-		public static int AdditionalFollowerSlots()
-		{
-			return Math.Max(0, Math.Min(MySettings.S_AdditionalFollowerSlots, 8));
-		}
+        public static int AdditionalFollowers(double skillsTotal)
+        {
+            int additionalFollowers = 0;
 
-		#region KoperPets
-		public static bool KoperPets()
+            if (skillsTotal >= 480)
+                additionalFollowers = MySettings.AdditionalFollowers480;
+            else if (skillsTotal >= 420)
+                additionalFollowers = MySettings.AdditionalFollowers420;
+            else if (skillsTotal >= 360)
+                additionalFollowers = MySettings.AdditionalFollowers360;
+            else if (skillsTotal >= 300)
+                additionalFollowers = MySettings.AdditionalFollowers300;
+            else if (skillsTotal >= 240)
+                additionalFollowers = MySettings.AdditionalFollowers240;
+            else if (skillsTotal >= 180)
+                additionalFollowers = MySettings.AdditionalFollowers180;
+            else
+                additionalFollowers = MySettings.AdditionalFollowersBase;
+
+            if (additionalFollowers > 10)
+                additionalFollowers = 10;
+            else if (additionalFollowers < 0)
+                additionalFollowers = 0;
+
+            return additionalFollowers;
+        }
+
+        #region KoperPets
+        public static bool KoperPets()
 		{
 			return MySettings.S_KoperPets;
 		}
@@ -594,7 +616,12 @@ namespace Server
 			return Math.Max(1.0, Math.Min(MySettings.S_KoperHerdingChance, 10.0));
 		}
 
-		public static int KoperCooldown()
+        public static double KoperDruidismChance()
+        {
+            return Math.Max(1.0, Math.Min(MySettings.S_KoperDruidismChance, 10.0));
+        }
+
+        public static int KoperCooldown()
 		{
 			return Math.Max(0, Math.Min(MySettings.S_KoperCooldown, 600));
 		}

@@ -396,8 +396,11 @@ namespace Server.SkillHandlers
 							m_Creature.Home = new Point3D(0, 0, 0);
 							m_Creature.FightMode = FightMode.Aggressor;
 							m_Creature.IsBonded = false;
-						}
-						else
+                            #region KoperPets
+                            Server.Custom.KoperPets.KoperPetManager.RegisterPet(m_Creature);
+                            #endregion
+                        }
+                        else
 						{
 							m_Creature.PrivateOverheadMessage( MessageType.Regular, 0x3B2, 502798, m_Tamer.NetState ); // You fail to tame the creature.
 						}
